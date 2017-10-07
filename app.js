@@ -8,13 +8,11 @@ const passport = require('passport');
 const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
 const mongoose = require('./lib/mongoose');
-
-
-const users = require('./routes/users');
+//const users = require('./routes/users');
 
 var app = express();
 
-require('./routes/index')(app, passport);
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -27,7 +25,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({
-    secret: "topSecret",
+    secret: "secrett",
     key: "sid",
     cookie: {
         path: "/",
@@ -42,11 +40,11 @@ app.use(session({
     saveUninitialized: true
 }));
 
+// passport to sessions and routes
 app.use(passport.initialize());
 app.use(passport.session());
 require('./lib/passport')(passport);
-// app.use('/', index);
-// app.use('/users', users);
+require('./routes/index')(app, passport);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

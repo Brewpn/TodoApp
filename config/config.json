@@ -3,8 +3,7 @@
     "uri": "mongodb://localhost/todoapp",
     "options": {
       "useMongoClient": true,
-      "keepAlive": 1,
-      "promiseLibrary": "global.Promise"
+      "keepAlive": 1
     }
   },
   "googleAuth": {
