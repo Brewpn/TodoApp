@@ -1,25 +1,31 @@
 const express = require('express');
 const User = require('../models/user').User;
+const jwt = require('jsonwebtoken');
+const config = require('../config/index');
 
 module.exports = function (app, passport) {
 
     //Rout that fid all users (for debug)
-    app.get('/users', function (req, res, next) {
+    app.get('/users', function (req, res, done) {
         User.find({}, function (err, users) {
-            if (err) return next(err );
+            if (err) return done(err );
             res.json(users);
         })
     });
 
-    //frontpage and task list activities routs
+    //front page and task list activities routs
     app.get('/', require('./frontpage').get);
-    app.get('/task_list', isLoggedIn, function(req, res) {
-          res.render('task_list.ejs', {
-              user : req.user // get the user out of session and pass to template
-        });
+
+
+    app.post('/task_list', passport.authenticate('jwt', {session: false}), function (req, res) {
+        res.json({status: res.user});
     });
 
-    //Logut rout
+    app.get('/task_list', function (req, res) {
+        res.json({status: res.user});
+    });
+
+    //Logout rout
     app.get('/logout', function(req, res) {
         req.logout();
           res.redirect('/');
@@ -27,23 +33,33 @@ module.exports = function (app, passport) {
 
 
     //google auth link
-    app.get('/auth/google', passport.authenticate('google', { scope : ['profile', 'email'] }));
+    app.get('/auth/google', passport.authenticate('google', { scope : ['profile', 'email']}));
+
 
     //callback google auth
     app.get('/auth/google/callback',
-          passport.authenticate('google', {
-              successRedirect : '/task_list',
-            failureRedirect : '/'
-        })
+        passport.authenticate('google', {
+            failureRedirect: '/',
+            session: false
+        }), function (req, res, done) {
+            User.findOne(req.user, function (err, user) {
+                if (err) done(err);
+
+                if (user) {
+                    const payload = {
+                        id: user.google.profileId,
+                        Name: user.google.name,
+                        email: user.google.email
+                    };
+                    console.log(payload);
+                    const token = jwt.sign(payload, 'secret');
+                    res.json({user: user.google.name, token: token});
+                    res.redirect('/task_list')
+                } else
+                    res.json('Login failed')
+            })
+
+        }
+
     );
 };
-
-function isLoggedIn(req, res, next) {
-
-    // if user is authenticated in the session, carry on
-    if (req.isAuthenticated())
-        return next();
-
-    // if they aren't redirect them to the home page
-    res.redirect('/');
-}

@@ -13,11 +13,16 @@
     "ejs": "~2.5.7",
     "express": "~4.15.5",
     "express-session": "^1.15.6",
+    "jsonwebtoken": "^8.0.1",
+    "jwt-simple": "^0.5.1",
     "mongoose": "^4.12.0",
     "morgan": "~1.9.0",
     "nconf": "^0.8.5",
     "passport": "^0.4.0",
     "passport-google-oauth": "^1.0.0",
+    "passport-google-oauth-jwt": "^0.2.3",
+    "passport-http-bearer": "^1.0.1",
+    "passport-jwt": "^3.0.0",
     "serve-favicon": "~2.4.5"
   }
 }

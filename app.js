@@ -5,8 +5,9 @@ const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const passport = require('passport');
-const session = require('express-session');
-const MongoStore = require('connect-mongo')(session);
+//const session = require('express-session');
+const jwt = require('jsonwebtoken');
+//const MongoStore = require('connect-mongo')(session);
 const mongoose = require('./lib/mongoose');
 //const users = require('./routes/users');
 
@@ -24,25 +25,25 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(session({
-    secret: "secrett",
-    key: "sid",
-    cookie: {
-        path: "/",
-        httpOnly: true,
-        maxAge: null
-    },
-    store: new MongoStore({
-        mongooseConnection: mongoose.connection,
-        adapter: 'connect-mongo'
-    }),
-    resave: true,
-    saveUninitialized: true
-}));
+// app.use(session({
+//     secret: "secrett",
+//     key: "sid",
+//     cookie: {
+//         path: "/",
+//         httpOnly: true,
+//         maxAge: null
+//     },
+//     store: new MongoStore({
+//         mongooseConnection: mongoose.connection,
+//         adapter: 'connect-mongo'
+//     }),
+//     resave: true,
+//     saveUninitialized: true
+// }));
 
-// passport to sessions and routes
 app.use(passport.initialize());
-app.use(passport.session());
+//app.use(passport.session());
+
 require('./lib/passport')(passport);
 require('./routes/index')(app, passport);
 
