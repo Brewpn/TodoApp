@@ -4,8 +4,7 @@ const util = require('util');
 
 const FolderListSchema = new Schema({
     title: {
-        type: String,
-        required: true
+        type: String
     },
     params: {
         date: {
@@ -23,8 +22,7 @@ const FolderListSchema = new Schema({
     },
     todoList: [{
         todoDescription: {
-            type: String,
-            required: true
+            type: String
         },
         todoDone: {
             type: Boolean,

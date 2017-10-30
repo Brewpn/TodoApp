@@ -14,7 +14,7 @@ module.exports = function (app, passport) {
     });
 
     //front page and task list activities routs
-    app.get('/', require('./frontpage').get);
+    app.get('/', require('./controllers/frontpage').get);
 
 
     app.post('/task_list', passport.authenticate('jwt', {session: false}), function (req, res) {
@@ -54,7 +54,7 @@ module.exports = function (app, passport) {
                     console.log(payload);
                     const token = jwt.sign(payload, 'secret');
                     res.json({user: user.google.name, token: token});
-                    res.redirect('/task_list')
+
                 } else
                     res.json('Login failed')
             })
