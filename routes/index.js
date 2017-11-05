@@ -1,7 +1,7 @@
 const express = require('express');
 const User = require('../models/user').User;
 const jwt = require('jsonwebtoken');
-const config = require('../config/index');
+//const config = require('../config/index');
 
 module.exports = function (app, passport) {
 
@@ -14,16 +14,16 @@ module.exports = function (app, passport) {
     });
 
     //front page and task list activities routs
-    app.get('/', require('./controllers/frontpage').get);
+    app.get('/', require('../controllers/frontpage').get);
 
 
-    app.post('/task_list', passport.authenticate('jwt', {session: false}), function (req, res) {
-        res.json({status: res.user});
-    });
+    app.post('/todoList',
+        passport.authenticate('jwt', {session: false}),
+        require('../controllers/todoList').get);
 
-    app.get('/task_list', function (req, res) {
-        res.json({status: res.user});
-    });
+    app.post('/create',
+        passport.authenticate('jwt', {session: false}),
+        require('../controllers/create').post);
 
     //Logout rout
     app.get('/logout', function(req, res) {
