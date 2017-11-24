@@ -14,16 +14,21 @@ module.exports = function (app, passport) {
     });
 
     //front page and task list activities routs
-    app.get('/', require('../controllers/frontpage').get);
+    app.get('/', require('./routeHendlers/frontpage').get);
 
 
-    app.post('/todoList',
+    app.all('/folderListOut',
         passport.authenticate('jwt', {session: false}),
-        require('../controllers/todoList').get);
+        require('./routeHendlers/folderListOut').get);
 
-    app.post('/create',
+    app.post('/createFolder',
         passport.authenticate('jwt', {session: false}),
-        require('../controllers/create').post);
+        require('./routeHendlers/createFolder').post);
+
+    app.all('/deleteFolder',
+        passport.authenticate('jwt', {session: false}),
+        require('./routeHendlers/deleteFolder').delete);
+
 
     //Logout rout
     app.get('/logout', function(req, res) {
@@ -51,7 +56,7 @@ module.exports = function (app, passport) {
                         Name: user.google.name,
                         email: user.google.email
                     };
-                    console.log(payload);
+
                     const token = jwt.sign(payload, 'secret');
                     res.json({user: user.google.name, token: token});
 

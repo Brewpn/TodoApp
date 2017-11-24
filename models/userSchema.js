@@ -1,8 +1,11 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const ObjectId = mongoose.Schema.Types.ObjectId;
 const util = require('util');
 
 const FolderListSchema = new Schema({
+
+    _id : ObjectId,
     title: {
         type: String
     },
@@ -29,6 +32,8 @@ const FolderListSchema = new Schema({
             default: false
         }
     }]
+
+
 });
 
 const UserSchema = new Schema({
@@ -50,7 +55,10 @@ const UserSchema = new Schema({
             required: true
         }
     },
-    folderList: FolderListSchema,
+    folderList: {
+        type: Array,
+        FolderListSchema
+    },
 });
 
 module.exports = UserSchema;
