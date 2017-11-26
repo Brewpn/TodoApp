@@ -1,12 +1,12 @@
-const User = require('../../models/user').User;
+const TodoFolder = require('../../models/user').TodoFolder;
 
 exports.get = function (req, res, done) {
 
-    User.findOne({_id : req.user._id}, function (err, user) {
+    TodoFolder.find({ownerId : req.user._id}, function (err, todoFolder) {
         if (err)
             return done(err);
 
-        res.json(user.folderList);
+        res.json(todoFolder);
 
     });
 

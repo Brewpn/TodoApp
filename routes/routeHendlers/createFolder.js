@@ -1,41 +1,37 @@
 const User = require('../../models/user').User;
+const TodoFolder = require('../../models/user').TodoFolder;
 const mongoose = require('mongoose');
 const ObjectId = mongoose.Types.ObjectId;
-const async = require('async');
 
 
 exports.post = function (req, res, done) {
 
     const newFolder = req.body;
 
-
-
-    async.waterfall([
-        function (callback) {
-            User.findOne({_id: req.user.id}, callback);
-        },
-        function (user, callback) {
-            if (!user.folderList)
-                user.folderList = {};
-
-            user.folderList.push({
+    User.findOne({_id: req.user.id})
+        .exec()
+        .then(user => {
+            let newTodoFolder = new TodoFolder({
                 _id : new ObjectId(),
-                title: newFolder.title,
-                params: {
-                    priority: newFolder.params.priority
+                ownerId : user._id,
+                title : newFolder.title,
+                params : {
+                    priority : newFolder.priority
                 }
             });
-            callback(null, user);
-        },
-        function (user) {
-            user.save(function (err) {
+
+            return(newTodoFolder);
+        })
+        .then(TodoFolder => {
+            TodoFolder.save(function (err) {
                 if (err)
                     throw err;
                 res.redirect('/folderListOut');
 
             });
-
-        }
-    ]);
+        })
+        .catch(err => {
+            return done(err)
+        });
 
 };

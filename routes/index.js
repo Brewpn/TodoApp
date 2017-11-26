@@ -29,6 +29,10 @@ module.exports = function (app, passport) {
         passport.authenticate('jwt', {session: false}),
         require('./routeHendlers/deleteFolder').delete);
 
+    app.post('/createTodo',
+        passport.authenticate('jwt', {session: false}),
+        require('./routeHendlers/createTodo').post);
+
 
     //Logout rout
     app.get('/logout', function(req, res) {
