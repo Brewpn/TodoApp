@@ -4,7 +4,7 @@ const ObjectId = mongoose.Types.ObjectId;
 
 
 exports.post = function (req, res, done) {
-
+//TODO think about replacing destructuring via the func with "native" params.
     let todoSet = new Promise((resolve, reject) => {
         const ownerId = req.user.id,
              {
@@ -25,7 +25,7 @@ exports.post = function (req, res, done) {
         .then((newTodo) => {
         todo.create(newTodo)
         })
-        .then(()=>{res.send(`done!`)});
+        .then(()=>{res.status(200).send(`done!`)});
 
 };
 

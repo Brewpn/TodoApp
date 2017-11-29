@@ -30,9 +30,9 @@ exports.post = function (req, res, done) {
             Folder.create(folder)
         })
         .then(()=>{
-                res.redirect('/folderListOut')
-	    .catch((err)=>res.error(err))//DEVELOPMENT
-        });
+            res.status(200).redirect('/folderListOut')
+        })
+        .catch((err)=>res.error(err));/*DEVELOPMENT*/
 
 
 
