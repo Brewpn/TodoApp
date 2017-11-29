@@ -7,18 +7,18 @@ exports.post = function (req, res, done) {
 
 
     let FolderSet = new Promise((resolve, reject) => {
-        const _OwnerId = req.user.id,
+        const ownerId = req.user.id,
             {
-                title: _title = `${req.user.google.name}'s folder`,
-                priority: _priority = `low`,
+                title = `${req.user.google.name}'s folder`,
+                priority = `low`,
             } = req.body;
 
         let folder = new Folder({
             _id: new ObjectId,
-            ownerId: _OwnerId,
-            title: _title,
+            ownerId,
+            title,
             params: {
-                priority: _priority
+                priority
             }
         });
         resolve(folder)
@@ -30,7 +30,8 @@ exports.post = function (req, res, done) {
             Folder.create(folder)
         })
         .then(()=>{
-                res.redirect('/folderListOut');
+                res.redirect('/folderListOut')
+	    .catch((err)=>res.error(err))//DEVELOPMENT
         });
 
 

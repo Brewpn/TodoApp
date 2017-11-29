@@ -5,6 +5,10 @@ const util = require('util');
 
     const todoSchema = new Schema({
         _id: ObjectId,
+        ownerId : {
+            type : ObjectId,
+            ref : 'User'
+        },
         folderId: {
             type: ObjectId,
             ref: 'TodoFolder'

@@ -5,31 +5,29 @@ const ObjectId = mongoose.Types.ObjectId;
 
 exports.post = function (req, res, done) {
 
-    let Todoset = new Promise((resolve, reject) => {
-        const {
-            folderId: _folderId,
-            todoDescription: _todoDescription
+    let todoSet = new Promise((resolve, reject) => {
+        const ownerId = req.user.id,
+             {
+            folderId,
+            todoDescription
         } = req.body;
 
-        let newtodo = new todo({
+        let newTodo = new todo({
             _id: new ObjectId,
-            folderId: _folderId,
-            todoDescription: _todoDescription
+            ownerId,
+            folderId,
+            todoDescription
         });
-        resolve(newtodo);
+        resolve(newTodo);
     });
 
-    Todoset
+    todoSet
         .then((newTodo) => {
         todo.create(newTodo)
         })
-        .then(()=>{res.send(`done!`)})
+        .then(()=>{res.send(`done!`)});
 
 };
-
-
-
-
 
 // exports.post = function (req, res, done) {
 //
