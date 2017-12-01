@@ -1,20 +1,18 @@
-const Folder = require('../../models/user').TodoFolder;
+const Folder = require('../../../models/user').TodoFolder;
 const mongoose = require('mongoose');
-const ObjectId = mongoose.Types.ObjectId;
 
 
 exports.post = function (req, res, done) {
 
 
     let FolderSet = new Promise((resolve, reject) => {
-        const ownerId = req.user.id,
-            {
+        const ownerId = req.user.id;
+         const   {
                 title = `${req.user.google.name}'s folder`,
                 priority = `low`,
             } = req.body;
 
         let folder = new Folder({
-            _id: new ObjectId,
             ownerId,
             title,
             params: {
@@ -30,7 +28,7 @@ exports.post = function (req, res, done) {
             Folder.create(folder)
         })
         .then(()=>{
-            res.status(200).redirect('/folderListOut')
+            res.status(200).redirect('.././folderListOut')
         })
         .catch((err)=>res.error(err));/*DEVELOPMENT*/
 

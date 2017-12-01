@@ -6,7 +6,6 @@ const util = require('util');
 
 const FolderListSchema = new Schema({
 
-    _id: ObjectId,
     ownerId : {
         type : ObjectId,
         ref : 'User'

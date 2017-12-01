@@ -1,0 +1,17 @@
+const TodoFolder = require('../../../models/user').TodoFolder;
+
+exports.get = function (req, res, done) {
+
+    TodoFolder.findOne({
+
+        ownerId : req.user._id,
+        _id : req.params.id
+
+    })
+
+        .exec()
+        .then((result)=>res.json(result))
+        .catch((err)=>res.send(err))
+
+
+};

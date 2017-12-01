@@ -14,24 +14,72 @@ module.exports = function (app, passport) {
     });
 
     //front page and task list activities routs
-    app.get('/', require('./routeHendlers/frontpage').get);
+    app.get('/', require('./routeHandlers/todoHandlers/frontpage').get);
 
 
     app.all('/folderListOut',
         passport.authenticate('jwt', {session: false}),
-        require('./routeHendlers/folderListOut').get);
+        require('./routeHandlers/folderHandlers/getAllFolders').get);
 
-    app.post('/createFolder',
-        passport.authenticate('jwt', {session: false}),
-        require('./routeHendlers/createFolder').post);
+        //
+    ////FOLDERS ROUTE LIST
+       //
 
-    app.all('/deleteFolder',
+    //get all current user`s folders
+    app.get('/folders',
         passport.authenticate('jwt', {session: false}),
-        require('./routeHendlers/deleteFolder').delete);
+        require('./routeHandlers/folderHandlers/getAllFolders').get);
 
-    app.post('/createTodo',
+
+    //get one exact folder of current user
+    app.get('/folders/:id',
         passport.authenticate('jwt', {session: false}),
-        require('./routeHendlers/createTodo').post);
+        require('./routeHandlers/folderHandlers/getFolderViaID').get);
+
+
+
+    //create new folder
+    app.post('/folders',
+        passport.authenticate('jwt', {session: false}),
+        require('./routeHandlers/folderHandlers/createFolder').post);
+
+    //delete folder and all to do from it via folder ID TODO need to be improved with :id parametr
+    app.delete('/folders',
+        passport.authenticate('jwt', {session: false}),
+        require('./routeHandlers/folderHandlers/deleteFolder').delete);
+
+    //update folder via ID TODO !UNDER MAINTENANCE! think about :id param in URL
+    app.put('/folders',
+        passport.authenticate('jwt', {session: false}),
+        require('./routeHandlers/folderHandlers/updateFolderInfo').put);
+
+//===============================================================================//
+
+       //
+    ////TODOs ROUTE LIST
+      //
+
+    //get all todos in folder
+    app.get('/todo/:id',
+        passport.authenticate('jwt', {session: false}),
+        require('./routeHandlers/todoHandlers/findAllTodoInFolder').get);
+
+    //get exect todoin folder ?? IS IT REALLY necessary?
+    //I`ll do it in case of neсessity
+
+    //create new to do
+    app.post('/todo/',
+        passport.authenticate('jwt', {session: false}),
+        require('./routeHandlers/todoHandlers/createTodo').post);
+
+    //delete one To do via ID
+    app.delete('/todo',
+        passport.authenticate('jwt', {session : false}),
+        require('./routeHandlers/todoHandlers/deleteTodoViaID').delete);
+
+
+   //============================================================================//
+
 
 
     //Logout rout

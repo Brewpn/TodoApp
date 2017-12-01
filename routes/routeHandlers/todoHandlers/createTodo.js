@@ -1,10 +1,9 @@
-const todo = require('../../models/user').todo;
+const todo = require('../../../models/user').todo;
 const mongoose = require('mongoose');
-const ObjectId = mongoose.Types.ObjectId;
 
 
 exports.post = function (req, res, done) {
-//TODO think about replacing destructuring via the func with "native" params.
+//TODO think about replacing destructuring via the func with ~~~ params.
     let todoSet = new Promise((resolve, reject) => {
         const ownerId = req.user.id,
              {
@@ -13,7 +12,6 @@ exports.post = function (req, res, done) {
         } = req.body;
 
         let newTodo = new todo({
-            _id: new ObjectId,
             ownerId,
             folderId,
             todoDescription
