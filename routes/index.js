@@ -21,6 +21,7 @@ module.exports = function (app, passport) {
         passport.authenticate('jwt', {session: false}),
         require('./routeHandlers/folderHandlers/getAllFolders').get);
 
+    //==================================================================
         //
     ////FOLDERS ROUTE LIST
        //
@@ -76,7 +77,10 @@ module.exports = function (app, passport) {
     app.delete('/todo',
         passport.authenticate('jwt', {session : false}),
         require('./routeHandlers/todoHandlers/deleteTodoViaID').delete);
-
+    //update TODO
+    app.put('/todo',
+        passport.authenticate('jwt', {session : false}),
+        require('./routeHandlers/todoHandlers/updateTodo').put);
 
    //============================================================================//
 
