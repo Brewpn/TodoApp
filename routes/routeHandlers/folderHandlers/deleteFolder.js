@@ -3,7 +3,7 @@ const todo = require('../../../models/user').todo;
 exports.delete = function (req, res, done) {
 
     const id = req.body.id,
-        OwnerId = req.user.id;
+        OwnerId = req.user._id;
 
   TodoFolder.findOneAndRemove({
       _id : id,

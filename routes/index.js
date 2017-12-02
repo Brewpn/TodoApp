@@ -18,7 +18,7 @@ module.exports = function (app, passport) {
 
 
     app.all('/folderListOut',
-        passport.authenticate('jwt', {session: false}),
+        passport.authenticate('bearer', {session: false}),
         require('./routeHandlers/folderHandlers/getAllFolders').get);
 
     //==================================================================
@@ -28,30 +28,30 @@ module.exports = function (app, passport) {
 
     //get all current user`s folders
     app.get('/folders',
-        passport.authenticate('jwt', {session: false}),
+        passport.authenticate('bearer', {session: false}),
         require('./routeHandlers/folderHandlers/getAllFolders').get);
 
 
     //get one exact folder of current user
     app.get('/folders/:id',
-        passport.authenticate('jwt', {session: false}),
+        passport.authenticate('bearer', {session: false}),
         require('./routeHandlers/folderHandlers/getFolderViaID').get);
 
 
 
     //create new folder
     app.post('/folders',
-        passport.authenticate('jwt', {session: false}),
+        passport.authenticate('bearer', {session: false}),
         require('./routeHandlers/folderHandlers/createFolder').post);
 
     //delete folder and all to do from it via folder ID TODO need to be improved with :id parametr
     app.delete('/folders',
-        passport.authenticate('jwt', {session: false}),
+        passport.authenticate('bearer', {session: false}),
         require('./routeHandlers/folderHandlers/deleteFolder').delete);
 
     //update folder via ID TODO !UNDER MAINTENANCE! think about :id param in URL
     app.put('/folders',
-        passport.authenticate('jwt', {session: false}),
+        passport.authenticate('bearer', {session: false}),
         require('./routeHandlers/folderHandlers/updateFolderInfo').put);
 
 //===============================================================================//
@@ -62,7 +62,7 @@ module.exports = function (app, passport) {
 
     //get all todos in folder
     app.get('/todo/:id',
-        passport.authenticate('jwt', {session: false}),
+        passport.authenticate('bearer', {session: false}),
         require('./routeHandlers/todoHandlers/findAllTodoInFolder').get);
 
     //get exect todoin folder ?? IS IT REALLY necessary?
@@ -70,21 +70,23 @@ module.exports = function (app, passport) {
 
     //create new to do
     app.post('/todo/',
-        passport.authenticate('jwt', {session: false}),
+        passport.authenticate('bearer', {session: false}),
         require('./routeHandlers/todoHandlers/createTodo').post);
 
     //delete one To do via ID
     app.delete('/todo',
-        passport.authenticate('jwt', {session : false}),
+        passport.authenticate('bearer', {session : false}),
         require('./routeHandlers/todoHandlers/deleteTodoViaID').delete);
     //update TODO
     app.put('/todo',
-        passport.authenticate('jwt', {session : false}),
+        passport.authenticate('bearer', {session : false}),
         require('./routeHandlers/todoHandlers/updateTodo').put);
 
    //============================================================================//
 
-
+       //
+    ////AUTHORIZATION ROUTE LIST
+      //
 
     //Logout rout
     app.get('/logout', function(req, res) {
@@ -92,6 +94,9 @@ module.exports = function (app, passport) {
           res.redirect('/');
     });
 
+    // here we have rout that creates new refresh token and new access token
+    app.post('/auth/refresh-token',
+        require('./routeHandlers/authHendlers/refreshTokenHendler').post);
 
     //google auth link
     app.get('/auth/google', passport.authenticate('google', { scope : ['profile', 'email']}));
@@ -102,25 +107,6 @@ module.exports = function (app, passport) {
         passport.authenticate('google', {
             failureRedirect: '/',
             session: false
-        }), function (req, res, done) {
-            User.findOne(req.user, function (err, user) {
-                if (err) done(err);
-
-                if (user) {
-                    const payload = {
-                        id: user.google.profileId,
-                        Name: user.google.name,
-                        email: user.google.email
-                    };
-
-                    const token = jwt.sign(payload, 'secret');
-                    res.json({user: user.google.name, token: token});
-
-                } else
-                    res.json('Login failed')
-            })
-
-        }
-
+        }), require('./routeHandlers/authHendlers/generateTokenHendler').get
     );
 };

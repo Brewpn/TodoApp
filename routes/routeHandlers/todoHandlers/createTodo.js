@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 exports.post = function (req, res, done) {
 //TODO think about replacing destructuring via the func with ~~~ params.
     let todoSet = new Promise((resolve, reject) => {
+        console.log(req.user.id);
         const ownerId = req.user.id,
              {
             folderId,
@@ -50,5 +51,6 @@ exports.post = function (req, res, done) {
 //         })
 //         .catch(err => {
 //             return done(err)
+//
 //         });
 // };
