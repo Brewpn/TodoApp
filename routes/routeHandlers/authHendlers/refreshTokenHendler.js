@@ -12,7 +12,10 @@ exports.post = function (req, res, done) {
                 if (!user)
                     res.status(404);
                 else
-                    return user;
+                    if (oldRefreshToken == user.google.token)
+                        return user;
+                    else
+                        res.status(403);
             })
             .then(user => {
 
