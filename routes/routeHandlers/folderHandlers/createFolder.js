@@ -30,7 +30,7 @@ exports.post = function (req, res, done) {
         .then(()=>{
             res.status(200).redirect('.././folderListOut')
         })
-        .catch((err)=>res.error(err));/*DEVELOPMENT*/
+        .catch((err)=>res.send(err));/*DEVELOPMENT*/
 
 
 

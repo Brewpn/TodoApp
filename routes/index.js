@@ -96,7 +96,7 @@ module.exports = function (app, passport) {
 
     // here we have rout that creates new refresh token and new access token
     app.post('/auth/refresh-token',
-        require('./routeHandlers/authHendlers/refreshTokenHendler').post);
+        require('./routeHandlers/authHandlers/refreshTokenHandler').post);
 
     //google auth link
     app.get('/auth/google', passport.authenticate('google', { scope : ['profile', 'email']}));
@@ -107,6 +107,6 @@ module.exports = function (app, passport) {
         passport.authenticate('google', {
             failureRedirect: '/',
             session: false
-        }), require('./routeHandlers/authHendlers/generateTokenHendler').get
+        }), require('./routeHandlers/authHandlers/generateTokenHandler').get
     );
 };
