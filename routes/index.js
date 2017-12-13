@@ -14,7 +14,7 @@ module.exports = function (app, passport) {
     });
 
     //front page and task list activities routs
-    app.get('/', require('./routeHandlers/todoHandlers/frontpage').get);
+    app.get('/', require('./routeHandlers/frontpage').get);
 
 
     app.all('/folderListOut',
