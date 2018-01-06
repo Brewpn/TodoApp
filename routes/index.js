@@ -31,12 +31,20 @@ module.exports = function (app, passport) {
         passport.authenticate('bearer', {session: false}),
         require('./routeHandlers/folderHandlers/getAllFolders').get);
 
+    ////Get sorted folders
+    //-------------------
+    app.get('/folders;sort=success',
+        passport.authenticate('bearer', {session: false}),
+        require('./routeHandlers/folderHandlers/sortSuccess').get);
+    app.get('/folders;sort=priority',
+        passport.authenticate('bearer', {session: false}),
+        require('./routeHandlers/folderHandlers/sortPriority').get);
+    //-------------------
 
     //get one exact folder of current user
     app.get('/folders/:id',
         passport.authenticate('bearer', {session: false}),
         require('./routeHandlers/folderHandlers/getFolderViaID').get);
-
 
 
     //create new folder

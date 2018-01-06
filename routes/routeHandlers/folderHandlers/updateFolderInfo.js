@@ -12,9 +12,11 @@ exports.put = function (req, res, done) {
     TodoFolder.findOne({_id, ownerId})
         .exec()
         .then(todoFolder => {
+
             if(title) todoFolder.title = title;
             if(priority) todoFolder.params.priority = priority;
             if(success) todoFolder.params.success = success;
+
             return todoFolder;
         })
         .then((todoFolder)=>{
