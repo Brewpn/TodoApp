@@ -1,9 +1,12 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="bin/www" type="NodeJSConfigurationType" factoryName="Node.js" path-to-node="project" path-to-js-file="bin/www" working-dir="$PROJECT_DIR$">
+  <configuration default="false" name="bin/www" type="NodeJSConfigurationType" factoryName="Node.js" path-to-js-file="bin/www" working-dir="$PROJECT_DIR$">
     <envs>
       <env name="DEBUG" value="TodoApp:*" />
+      <env name="uri" value="mongodb://localhost/todoapp" />
+      <env name="clientId" value="451521072511-9lvpdn9kvr67279q5ao8ji65ovri9g88.apps.googleusercontent.com" />
+      <env name="clientSecret" value="LNvUvPc7K0hYXJHLxl7PF-qG" />
+      <env name="callbackURL" value="http://localhost:3000/auth/google/callback" />
     </envs>
-    <browser url="http://localhost:3000/" />
     <EXTENSION ID="com.jetbrains.nodejs.run.NodeJSStartBrowserRunConfigurationExtension">
       <browser url="http://localhost:3000/" />
     </EXTENSION>

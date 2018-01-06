@@ -1,15 +1,9 @@
 {
   "mongoose": {
-    "uri": "mongodb://localhost/todoapp",
     "options": {
       "useMongoClient": true,
       "keepAlive": 1
     }
-  },
-  "googleAuth": {
-    "clientId": "451521072511-9lvpdn9kvr67279q5ao8ji65ovri9g88.apps.googleusercontent.com",
-    "clientSecret": "LNvUvPc7K0hYXJHLxl7PF-qG",
-    "callbackURL": "http://localhost:3000/auth/google/callback"
   }
 
 }
