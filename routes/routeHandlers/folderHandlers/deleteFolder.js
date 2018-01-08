@@ -1,38 +1,52 @@
-const TodoFolder = require('../../../models/user').TodoFolder;
-const todo = require('../../../models/user').todo;
-exports.delete = function (req, res, done) {
+const deleteMethod = require('../../../db/commonMethods/delete'),
+    ObjectID = require('mongodb').ObjectID;
 
-    const id = req.body.id,
-        OwnerId = req.user._id;
+exports.delete = async function (req, res, done) {
 
-    Promise.all([
+    async function deleteFolder() {
+        const collectionName = "todofolders",
+            query = {
+                _id: ObjectID(req.body.id),
+                ownerId: ObjectID(req.user._id)
+            },
+            methodSettings = {collectionName, query};
 
-        //deleting folder
-        TodoFolder.findOneAndRemove({
-        _id: id,
-        ownerId: OwnerId
-    }),
+        (async function () {
+            try {
+                return await deleteMethod(methodSettings);
+            }
+            catch(err){
+                throw new Error(err)
+            }
+        })()
 
-        //and all stuff in it
-        todo.remove({
-            folderId: id,
-            ownerId: OwnerId
-        })
-    ])
-        .then(() => res.status(200).send(`Folder (and all TODO from it) with ${req.body.id.toUpperCase()} have been deleted`),
-            (error) => res.status(500).send(`Server internal ERROR ${error}`));
+    }
+
+    async function deleteAllToDoInFolder() {
+        const collectionName = "todos",
+            query = {
+                folderId: ObjectID(req.body.id),
+                ownerId: ObjectID(req.user._id)
+            },
+            methodSettings = {collectionName, query, deleteMany: true};
+
+        (async function () {
+            try {
+                return await deleteMethod(methodSettings);
+            }
+            catch(err){
+                throw new Error(err)
+            }
+        })()
+
+    }
+
+    try {
+        let result = await Promise.all([deleteFolder(), deleteAllToDoInFolder()]);
+        res.status(200).send(result);
+    }
+    catch (err){
+        res.status(500).send(`error!`)
+    }
 };
 
-
-// TodoFolder.findOneAndRemove({
-//     _id : id,
-//     ownerId : OwnerId
-// })
-//     .catch((err)=>res.send(err));
-// todo.remove({
-//     folderId : id,
-//     ownerId : OwnerId
-// })
-//     .then(()=>{
-//         res.send(`Folder (and all TODO from it) with ${req.body.id.toUpperCase()} have been deleted`);
-//     })

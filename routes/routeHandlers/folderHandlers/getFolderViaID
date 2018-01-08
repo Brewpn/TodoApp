@@ -1,54 +1,33 @@
 const findMethod = require('../../../db/commonMethods/find'),
-ObjectID = require('mongodb').ObjectID;
+    ObjectID = require('mongodb').ObjectID;
 
 
 exports.get = async function (req, res, done) {
 
     const collectionName = "todofolders",
+
         query = {
+            ownerId: ObjectID(req.user._id),
+            _id: ObjectID(req.params.id)
+        },
 
-        ownerId: req.user._id,
-        _id: ObjectID(req.params.id)
-
-    },
         methodSettings = {collectionName, query, findOnlyOne: true};
-
 
 
     (async function () {
         try {
             const response = await findMethod(methodSettings);
-            res.status(200).send(response);
+            if (response === null) {
+                res.status(404).send(`no such folder`)
+            }
+            else {
+                res.status(200).send(response)
+            }
         }
         catch (err) {
-            res.status(404).send(err.stack)
+            res.status(500).send(err.stack)
         }
     })()
 
 
 };
-
-
-
-
-
-//
-//
-//
-// const TodoFolder = require('../../../models/user').TodoFolder;
-//
-// exports.get = function (req, res, done) {
-//
-//     TodoFolder.findOne({
-//
-//         ownerId : req.user._id,
-//         _id : req.params.id
-//
-//     })
-//
-//         .exec()
-//         .then((result)=>res.json(result))
-//         .catch((err)=>res.send(err))
-//
-//
-// };
