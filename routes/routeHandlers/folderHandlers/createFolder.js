@@ -1,34 +1,34 @@
-const Folder = require('../../../models/user').TodoFolder;
+const createMethod = require('../../../db/commonMethods/create');
+ObjectID = require('mongodb').ObjectID;
 
-exports.post = function (req, res, done) {
+exports.post = async function (req, res, done) {
+
+    const collectionName = "todofolders";
+    const {
+        title = `${req.user.google.name}'s folder`,
+        priority = `low`,
+    } = req.body;
+
+    const query = {
+        ownerId: ObjectID(req.user._id),
+        title,
+        params: {
+            priority
+        }
+    };
+
+    const methodSettings = {collectionName, query};
 
 
-    let FolderSet = new Promise((resolve, reject) => {
-        const ownerId = req.user.id;
-         const   {
-                title = `${req.user.google.name}'s folder`,
-                priority = `low`,
-            } = req.body;
+    (async function () {
+        try {
+            const response = await createMethod(methodSettings);
+            res.status(200).send(response);
+        }
+        catch (err) {
+            res.status(500).send(err.stack)
+        }
 
-        let folder = new Folder({
-            ownerId,
-            title,
-            params: {
-                priority
-            }
-        });
-        resolve(folder)
-
-    });
-
-    FolderSet
-        .then((folder) => {
-            Folder.create(folder)
-        })
-        .then(()=>{
-            res.status(200).redirect('.././folderListOut')
-        })
-        .catch((err)=>res.send(err));/*DEVELOPMENT*/
-
+    })()
 
 };
